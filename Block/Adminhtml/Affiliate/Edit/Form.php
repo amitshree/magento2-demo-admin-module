@@ -68,6 +68,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ['legend' => __('Add Affiliate Data'), 'class' => 'fieldset-wide']
             );
         }
+        $fieldset->addType('image', '\Amit\Affiliate\Block\Adminhtml\Affiliate\Helper\Image');
 
         $fieldset->addField(
             'name',
@@ -83,7 +84,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
 
-       $fieldset->addField(
+      /* $fieldset->addField(
             'creation_time',
             'date',
             [
@@ -95,7 +96,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'class' => 'required-entry',
                 'style' => 'width:200px',
             ]
-        );
+        );*/
 
 
 
@@ -111,6 +112,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'class' => 'status',
                 'required' => true,
             ]
+        );
+
+        $fieldset->addField(
+            'profile_image',
+            'image',
+            array(
+                'name' => 'profile_image',
+                'label' => __('Image'),
+                'title' => __('Image')
+            )
+
         );
         $form->setValues($model->getData());
         $form->setUseContainer(true);

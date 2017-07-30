@@ -16,6 +16,7 @@ class NewAction extends \Magento\Backend\App\Action
         \Magento\Framework\Registry $coreRegistry
     )
     {
+
         $this->_affiliateFactory = $affiliateFactory;
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);

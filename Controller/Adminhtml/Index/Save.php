@@ -13,10 +13,14 @@ class Save extends \Magento\Backend\App\Action
 {
 
     public function __construct(
+        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
+        \Amit\Affiliate\Model\Affiliate\Image $imageModel,
         \Amit\Affiliate\Model\Affiliate $affiliate,
         \Magento\Backend\App\Action\Context $context
     )
     {
+        $this->uploaderFactory = $uploaderFactory;
+        $this->imageModel = $imageModel;
        $this->affiliate = $affiliate;
         parent::__construct($context);
     }
@@ -34,6 +38,8 @@ class Save extends \Magento\Backend\App\Action
             if (isset($data['id'])) {
                 $affiliateData->setAffiliateId($data['id']);
             }
+            $profileImage = $this->uploadFileAndGetName('profile_image', $this->imageModel->getBaseDir(), $data);
+            $affiliateData->setProfileImage($profileImage);
             $affiliateData->save();
             $this->messageManager->addSuccess(__('Affiliate data has been successfully saved.'));
         } catch (Exception $e) {
@@ -50,5 +56,30 @@ class Save extends \Magento\Backend\App\Action
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Amit_Affiliate::save');
+    }
+
+    public function uploadFileAndGetName($input, $destinationFolder, $data)
+    {
+        try {
+            if (isset($data[$input]['delete'])) {
+                return '';
+            } else {
+                $uploader = $this->uploaderFactory->create(['fileId' => $input]);
+                $uploader->setAllowRenameFiles(true);
+                $uploader->setFilesDispersion(true);
+                $uploader->setAllowCreateFolders(true);
+                $result = $uploader->save($destinationFolder);
+                return $result['file'];
+            }
+        } catch (\Exception $e) {
+            if ($e->getCode() != \Magento\Framework\File\Uploader::TMP_NAME_EMPTY) {
+                throw new FrameworkException($e->getMessage());
+            } else {
+                if (isset($data[$input]['value'])) {
+                    return $data[$input]['value'];
+                }
+            }
+        }
+        return '';
     }
 }
