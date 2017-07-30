@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+    <add id="Amit_Affiliate::affiiate_menu" resource="Amit_Affiliate::affiiate_menu" title="Affiliate Members" action="affiliate/index/index" module="Amit_Affiliate" parent="Magento_Backend::marketing" sortOrder="10"/></menu>
+</config>
